@@ -11,7 +11,7 @@ import (
 )
 
 var length = flag.Int("n", 100, "Number of words")
-var timeout = flag.Int("t", 3600, "Timeout time")
+var timeout = flag.Int("t", 3600, "Timeout time (in seconds)")
 
 func main() {
 	flag.Parse()
