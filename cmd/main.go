@@ -18,13 +18,10 @@ func main() {
 	fmt.Println(para)
 	startTime := time.Now()
 	reader := bufio.NewReader(os.Stdin)
-	userStr, _, _ := reader.ReadLine()
-	if string(userStr) == para {
-		fmt.Println("succcess")
-	} else {
-		fmt.Println("false")
-	}
-	fmt.Printf("Speed: %v wps", (*length)/int(time.Now().Sub(startTime).Minutes()))
+	userPara, _, _ := reader.ReadLine()
+	numCorrWords := countCorrWord(para, string(userPara))
+	fmt.Printf("Speed: %v wps\n", int(float64(numCorrWords)/time.Now().Sub(startTime).Minutes()))
+	fmt.Printf("Accuracy: %v%%\n", int(float64(numCorrWords)/float64(*length)*100))
 }
 
 func getRandPara(n int) string {
@@ -37,4 +34,16 @@ func getRandPara(n int) string {
 		}
 	}
 	return str.String()
+}
+
+func countCorrWord(para string, userPara string) int {
+	words := strings.Split(para, " ")
+	userWords := strings.Split(userPara, " ")
+	count := len(userWords)
+	for i := range userWords {
+		if userWords[i] != words[i] {
+			count--
+		}
+	}
+	return count
 }
