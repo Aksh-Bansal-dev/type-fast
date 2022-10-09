@@ -11,14 +11,23 @@ import (
 )
 
 var length = flag.Int("n", 100, "Number of words")
+var timeout = flag.Int("t", 3600, "Timeout time")
 
 func main() {
 	flag.Parse()
 	para := getRandPara(*length)
 	fmt.Println(para)
-	startTime := time.Now()
+
 	reader := bufio.NewReader(os.Stdin)
+	startTime := time.Now()
+	timer := time.NewTimer(time.Duration(*timeout) * time.Second)
+	go func() {
+		<-timer.C
+		fmt.Println("\n Time over!")
+		os.Exit(1)
+	}()
 	userPara, _, _ := reader.ReadLine()
+
 	numCorrWords := countCorrWord(para, string(userPara))
 	fmt.Printf("Speed: %v wps\n", int(float64(numCorrWords)/time.Now().Sub(startTime).Minutes()))
 	fmt.Printf("Accuracy: %v%%\n", int(float64(numCorrWords)/float64(*length)*100))
